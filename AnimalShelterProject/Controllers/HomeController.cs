@@ -8,7 +8,6 @@ namespace AnimalShelterProject.Controllers
         [HttpGet("/")]
         public ActionResult Index()
         {
-            System.Console.WriteLine("Hi");
             return View();
         }
     }

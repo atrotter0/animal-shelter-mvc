@@ -7,13 +7,6 @@ namespace AnimalShelterProject.Models
 {
     public class Animal
     {
-        private string _type;
-        private string _breed;
-        private string _gender;
-        private string _name;
-        private DateTime _admittanceDate;
-        private int _id;
-
         public string Type { get; set; }
         public string Breed { get; set; }
         public string Gender { get; set; }
@@ -21,19 +14,33 @@ namespace AnimalShelterProject.Models
         public DateTime AdmittanceDate { get; set; }
         public int Id { get; set; }
 
-        public Animal(string type, string breed, string gender, string name, DateTime admittanceDate, int id = 0)
+        public Animal(string testtype, string breed, string gender, string name, DateTime admittanceDate, int id = 0)
         {
-            _type = type;
-            _breed = breed;
-            _gender = gender;
-            _name = name;
-            _admittanceDate = admittanceDate;
-            _id = id;
+            this.Type = testtype;
+            this.Breed = breed;
+            this.Gender = gender;
+            this.Name = name;
+            this.AdmittanceDate = admittanceDate;
+            this.Id = id;
         }
 
-        public Animal()
+        public override bool Equals(System.Object otherAnimal)
         {
-            
+            if(!(otherAnimal is Animal))
+            {
+                return false;
+            }
+            else
+            {
+                Animal newAnimal = (Animal) otherAnimal;
+                bool descriptionEquality = (this.Type == newAnimal.Type && this.Breed == newAnimal.Breed && this.Gender == newAnimal.Gender && this.Name == newAnimal.Name && this.AdmittanceDate == newAnimal.AdmittanceDate);
+                return (descriptionEquality);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Name.GetHashCode();
         }
 
         public static void DeleteAll()
@@ -77,34 +84,35 @@ namespace AnimalShelterProject.Models
             return allAnimals;
         }
 
-        public override bool Equals(System.Object otherAnimal)
-        {
-            if(!(otherAnimal is Animal))
-            {
-                return false;
-            }
-            else
-            {
-                Animal newAnimal = (Animal) otherAnimal;
-                bool descriptionEquality = (this.Type == newAnimal.Type && this.Breed == newAnimal.Breed && this.Gender == newAnimal.Gender && this.Name == newAnimal.Name && this.AdmittanceDate == newAnimal.AdmittanceDate);
-                System.Console.WriteLine("bool val: " + descriptionEquality);
-                System.Console.WriteLine("breed"+this.Breed == newAnimal.Breed);
-
-                System.Console.WriteLine("name"+this.Name == newAnimal.Name);
-
-
-                return (descriptionEquality);
-            }
-        }
-
-        public override int GetHashCode()
-        {
-            return this.Name.GetHashCode();
-        }
-
         public void Save()
         {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO animals (type, breed, gender, name, admittanceDate) VALUES (@AnimalType, @AnimalBreed, @AnimalGender, @AnimalName, @AnimalAdmittanceDate);";
 
+            MySqlParameter type = new MySqlParameter();
+            type.ParameterName = "@AnimalType";
+            type.Value = this.Type;
+            MySqlParameter breed = new MySqlParameter();
+            breed.ParameterName = "@AnimalBreed";
+            breed.Value = this.Breed;
+            MySqlParameter gender = new MySqlParameter();
+            gender.ParameterName = "@AnimalGender";
+            gender.Value = this.Gender;
+            MySqlParameter name = new MySqlParameter();
+            name.ParameterName = "@AnimalName";
+            name.Value = this.Name;
+            MySqlParameter admittanceDate = new MySqlParameter();
+            admittanceDate.ParameterName = "@AnimalAdmittanceDate";
+            admittanceDate.Value = this.admittanceDate;
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
         }
+
     }
 }
