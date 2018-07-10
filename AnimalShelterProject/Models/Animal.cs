@@ -144,6 +144,25 @@ namespace AnimalShelterProject.Models
             }
         }
 
+        public void Delete()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM animals WHERE id = @AnimalId;";
+
+            MySqlParameter id = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@AnimalId", this.Id);
+
+            cmd.ExecuteNonQuery();
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
         public static Animal Find(int id)
         {
             MySqlConnection conn = DB.Connection();

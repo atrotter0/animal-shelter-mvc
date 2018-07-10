@@ -43,6 +43,14 @@ namespace AnimalShelterProject.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost("/animals/{id}/delete")]
+        public ActionResult DeleteAnimal(int id)
+        {
+            Animal newAnimal = Animal.Find(id);
+            newAnimal.Delete();
+            return RedirectToAction("Index");
+        }
+
         [HttpGet("/animals/new")]
         public ActionResult NewAnimal()
         {

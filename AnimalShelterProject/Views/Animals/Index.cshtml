@@ -20,6 +20,12 @@
                             Breed: @animal.Breed<br/>
                             Gender: @animal.Gender<br/>
                         </div>
+                        <div class='animal-actions-box'>
+                            <a href='/animals/@animal.Id' class='btn btn-md btn-success'>Update</a>
+                            <form id='deleteForm' action='/animals/@animal.Id/delete' method='POST'>
+                                <button type='submit' class='btn btn-md btn-danger'>Delete</button>
+                            </form>
+                        </div>
                     </div>
                  }
              }
