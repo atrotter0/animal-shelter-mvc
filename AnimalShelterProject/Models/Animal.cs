@@ -92,25 +92,15 @@ namespace AnimalShelterProject.Models
             cmd.CommandText = @"INSERT INTO animals (type, breed, gender, name, admittance_date) VALUES (@AnimalType, @AnimalBreed, @AnimalGender, @AnimalName, @AnimalAdmittanceDate);";
 
             MySqlParameter type = new MySqlParameter();
-            type.ParameterName = "@AnimalType";
-            type.Value = this.Type;
-            cmd.Parameters.Add(type);
+            cmd.Parameters.AddWithValue("@AnimalType", this.Type);
             MySqlParameter breed = new MySqlParameter();
-            breed.ParameterName = "@AnimalBreed";
-            breed.Value = this.Breed;
-            cmd.Parameters.Add(breed);
+            cmd.Parameters.AddWithValue("@AnimalBreed", this.Breed);
             MySqlParameter gender = new MySqlParameter();
-            gender.ParameterName = "@AnimalGender";
-            gender.Value = this.Gender;
-            cmd.Parameters.Add(gender);
+            cmd.Parameters.AddWithValue("@AnimalGender", this.Gender);
             MySqlParameter name = new MySqlParameter();
-            name.ParameterName = "@AnimalName";
-            name.Value = this.Name;
-            cmd.Parameters.Add(name);
+            cmd.Parameters.AddWithValue("@AnimalName", this.Name);
             MySqlParameter admittanceDate = new MySqlParameter();
-            admittanceDate.ParameterName = "@AnimalAdmittanceDate";
-            admittanceDate.Value = this.AdmittanceDate;
-            cmd.Parameters.Add(admittanceDate);
+            cmd.Parameters.AddWithValue("@AnimalAdmittanceDate", this.AdmittanceDate);
 
             cmd.ExecuteNonQuery();
             this.Id = (int) cmd.LastInsertedId;
@@ -122,5 +112,80 @@ namespace AnimalShelterProject.Models
             }
         }
 
+        public static Animal Find(int id)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM animals WHERE id = @findId;";
+            MySqlParameter findId = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@findId", id);
+            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+
+            int animalId = 0;
+            string animalType = "";
+            string animalBreed = "";
+            string animalGender = "";
+            string animalName = "";
+            DateTime animalDate = new DateTime();
+
+            while (rdr.Read())
+            {
+                animalType = rdr.GetString(0);
+                animalBreed = rdr.GetString(1);
+                animalGender = rdr.GetString(2);
+                animalName = rdr.GetString(3);
+                animalDate = rdr.GetDateTime(4);
+                animalId = rdr.GetInt32(5);
+            }
+
+            Animal foundAnimal = new Animal(animalType, animalBreed, animalGender, animalName, animalDate, animalId);
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return foundAnimal;
+        }
+
+        public static Animal Find(string record, string columnName)
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"SELECT * FROM animals WHERE " + columnName + " = @findRecord;";
+            MySqlParameter findRecord = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@findRecord", record);
+            var rdr = cmd.ExecuteReader() as MySqlDataReader;
+
+            int animalId = 0;
+            string animalType = "";
+            string animalBreed = "";
+            string animalGender = "";
+            string animalName = "";
+            DateTime animalDate = new DateTime();
+
+            while (rdr.Read())
+            {
+                animalType = rdr.GetString(0);
+                animalBreed = rdr.GetString(1);
+                animalGender = rdr.GetString(2);
+                animalName = rdr.GetString(3);
+                animalDate = rdr.GetDateTime(4);
+                animalId = rdr.GetInt32(5);
+            }
+
+            Animal foundAnimal = new Animal(animalType, animalBreed, animalGender, animalName, animalDate, animalId);
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+            return foundAnimal;
+        }
     }
 }

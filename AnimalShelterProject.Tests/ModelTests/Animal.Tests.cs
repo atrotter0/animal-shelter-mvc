@@ -65,5 +65,25 @@ namespace AnimalShelterProject.Tests
             List<Animal> testList = new List<Animal>{testAnimal};
             CollectionAssert.AreEqual(testList, result);
         }
+
+        [TestMethod]
+        public void Find_FindsAnimalInDatabaseById_Animal()
+        {
+            DateTime dateResult = new DateTime(2077, 07, 10);
+            Animal newAnimal = new Animal("cat", "persian", "female", "petunia", dateResult);
+            newAnimal.Save();
+            Animal foundAnimal = Animal.Find(newAnimal.Id);
+            Assert.AreEqual(newAnimal, foundAnimal);
+        }
+
+        [TestMethod]
+        public void Find_FindsAnimalInDatabaseByPropertyName_Animal()
+        {
+            DateTime dateResult = new DateTime(2077, 07, 10);
+            Animal newAnimal = new Animal("cat", "persian", "female", "petunia", dateResult);
+            newAnimal.Save();
+            Animal foundAnimal = Animal.Find(newAnimal.Name, "name");
+            Assert.AreEqual(newAnimal, foundAnimal);
+        }
     }
 }
