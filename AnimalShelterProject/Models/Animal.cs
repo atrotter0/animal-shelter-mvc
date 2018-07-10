@@ -88,24 +88,32 @@ namespace AnimalShelterProject.Models
         {
             MySqlConnection conn = DB.Connection();
             conn.Open();
-            var cmd = conn.CreateCommand as MySqlCommand;
-            cmd.CommandText = @"INSERT INTO animals (type, breed, gender, name, admittanceDate) VALUES (@AnimalType, @AnimalBreed, @AnimalGender, @AnimalName, @AnimalAdmittanceDate);";
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"INSERT INTO animals (type, breed, gender, name, admittance_date) VALUES (@AnimalType, @AnimalBreed, @AnimalGender, @AnimalName, @AnimalAdmittanceDate);";
 
             MySqlParameter type = new MySqlParameter();
             type.ParameterName = "@AnimalType";
             type.Value = this.Type;
+            cmd.Parameters.Add(type);
             MySqlParameter breed = new MySqlParameter();
             breed.ParameterName = "@AnimalBreed";
             breed.Value = this.Breed;
+            cmd.Parameters.Add(breed);
             MySqlParameter gender = new MySqlParameter();
             gender.ParameterName = "@AnimalGender";
             gender.Value = this.Gender;
+            cmd.Parameters.Add(gender);
             MySqlParameter name = new MySqlParameter();
             name.ParameterName = "@AnimalName";
             name.Value = this.Name;
+            cmd.Parameters.Add(name);
             MySqlParameter admittanceDate = new MySqlParameter();
             admittanceDate.ParameterName = "@AnimalAdmittanceDate";
-            admittanceDate.Value = this.admittanceDate;
+            admittanceDate.Value = this.AdmittanceDate;
+            cmd.Parameters.Add(admittanceDate);
+
+            cmd.ExecuteNonQuery();
+            this.Id = (int) cmd.LastInsertedId;
 
             conn.Close();
             if (conn != null)
