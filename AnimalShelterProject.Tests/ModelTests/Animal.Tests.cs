@@ -13,7 +13,7 @@ namespace AnimalShelterProject.Tests
             Animal.DeleteAll();
         }
 
-        public void AnimalTests()
+        public AnimalTest()
         {
             DBConfiguration.ConnectionString = "server=localhost;user id=root;password=root;port=8889;database=shelter_test;";
         }

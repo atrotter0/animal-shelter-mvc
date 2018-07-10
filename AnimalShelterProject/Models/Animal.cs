@@ -24,6 +24,11 @@ namespace AnimalShelterProject.Models
             this.Id = id;
         }
 
+        public Animal()
+        {
+
+        }
+
         public override bool Equals(System.Object otherAnimal)
         {
             if(!(otherAnimal is Animal))
@@ -45,16 +50,16 @@ namespace AnimalShelterProject.Models
 
         public static void DeleteAll()
         {
-           MySqlConnection conn = DB.Connection();
-           conn.Open();
-           var cmd = conn.CreateCommand() as MySqlCommand;
-           cmd.CommandText = @"DELETE FROM animals;";
-           cmd.ExecuteNonQuery();
-           conn.Close();
-           if (conn != null)
-           {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"DELETE FROM animals;";
+            cmd.ExecuteNonQuery();
+            conn.Close();
+            if (conn != null)
+            {
                conn.Dispose();
-           }
+            }
         }
 
         public static List<Animal> GetAll()
@@ -104,6 +109,33 @@ namespace AnimalShelterProject.Models
 
             cmd.ExecuteNonQuery();
             this.Id = (int) cmd.LastInsertedId;
+
+            conn.Close();
+            if (conn != null)
+            {
+                conn.Dispose();
+            }
+        }
+
+        public void Update()
+        {
+            MySqlConnection conn = DB.Connection();
+            conn.Open();
+            var cmd = conn.CreateCommand() as MySqlCommand;
+            cmd.CommandText = @"UPDATE animals SET type = @AnimalType, breed = @AnimalBreed, gender = @AnimalGender, name = @AnimalName WHERE id = @AnimalId;";
+
+            MySqlParameter type = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@AnimalType", this.Type);
+            MySqlParameter breed = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@AnimalBreed", this.Breed);
+            MySqlParameter gender = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@AnimalGender", this.Gender);
+            MySqlParameter name = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@AnimalName", this.Name);
+            MySqlParameter id = new MySqlParameter();
+            cmd.Parameters.AddWithValue("@AnimalId", this.Id);
+
+            cmd.ExecuteNonQuery();
 
             conn.Close();
             if (conn != null)
@@ -186,6 +218,12 @@ namespace AnimalShelterProject.Models
                 conn.Dispose();
             }
             return foundAnimal;
+        }
+
+        public string ConvertDateToString(DateTime date)
+        {
+            string format = "MMM d, yyyy";
+            return date.ToString(format);
         }
     }
 }

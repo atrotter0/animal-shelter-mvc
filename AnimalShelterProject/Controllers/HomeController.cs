@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using AnimalShelterProject.Models;
 
@@ -8,7 +10,8 @@ namespace AnimalShelterProject.Controllers
         [HttpGet("/")]
         public ActionResult Index()
         {
-            return View();
+            List<Animal> allAnimals = Animal.GetAll();
+            return View(allAnimals);
         }
     }
 }

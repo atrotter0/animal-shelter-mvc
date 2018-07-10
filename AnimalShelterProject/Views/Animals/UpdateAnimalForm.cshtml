@@ -1,0 +1,40 @@
+@{
+  Layout = "_Layout";
+}
+
+<div class='container'>
+      <div class='row'>
+          <h2>Update Animal</h2>
+          <form action="/animals/@Model.Id/update" method="post">
+              <div class="form-group">
+                  <label for="type">Type of Animal:</label>
+                  <input name="type" id="type" type="text" class="form-control" value="@Model.Type">
+              </div>
+              <div class="form-group">
+                  <label for="breed">Animal Breed:</label>
+                  <input name="breed" id="breed" type="text" class="form-control" value="@Model.Breed">
+              </div>
+              <div class="form-group">
+                  <label for="gender">Animal Gender:</label>
+                  <select name="gender" id="gender" class="form-control">
+                      @if (Model.Gender == "Male")
+                      {
+                          <option selected>Male</option>
+                          <option>Female</option>
+                      }
+                      else
+                      {
+                          <option>Male</option>
+                          <option selected>Female</option>
+                      }
+                  </select>
+              </div>
+              <div class="form-group">
+                  <label for="name">Animal Name:</label>
+                  <input name="name" id="name" type="text" class="form-control" value="@Model.Name">
+              </div>
+              <input name="id" id="id" type="hidden" class="form-control" value="@Model.Id">
+              <button type="submit" class="btn btn-lg btn-info">Update Animal</button>
+          </form>
+      </div>
+</div>
