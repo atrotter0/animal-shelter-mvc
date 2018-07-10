@@ -21,7 +21,7 @@ namespace AnimalShelterProject.Models
         public DateTime AdmittanceDate { get; set; }
         public int Id { get; set; }
 
-        public Animal(string type, string breed, string gender, string name, DateTime admittanceDate, int id)
+        public Animal(string type, string breed, string gender, string name, DateTime admittanceDate, int id = 0)
         {
             _type = type;
             _breed = breed;
@@ -29,6 +29,11 @@ namespace AnimalShelterProject.Models
             _name = name;
             _admittanceDate = admittanceDate;
             _id = id;
+        }
+
+        public Animal()
+        {
+            
         }
 
         public static void DeleteAll()
@@ -70,6 +75,36 @@ namespace AnimalShelterProject.Models
                 conn.Dispose();
             }
             return allAnimals;
+        }
+
+        public override bool Equals(System.Object otherAnimal)
+        {
+            if(!(otherAnimal is Animal))
+            {
+                return false;
+            }
+            else
+            {
+                Animal newAnimal = (Animal) otherAnimal;
+                bool descriptionEquality = (this.Type == newAnimal.Type && this.Breed == newAnimal.Breed && this.Gender == newAnimal.Gender && this.Name == newAnimal.Name && this.AdmittanceDate == newAnimal.AdmittanceDate);
+                System.Console.WriteLine("bool val: " + descriptionEquality);
+                System.Console.WriteLine("breed"+this.Breed == newAnimal.Breed);
+
+                System.Console.WriteLine("name"+this.Name == newAnimal.Name);
+
+
+                return (descriptionEquality);
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Name.GetHashCode();
+        }
+
+        public void Save()
+        {
+
         }
     }
 }
